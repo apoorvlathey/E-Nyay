@@ -5,15 +5,15 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
-import web3 from "../functionalities/web3";
 import AddNewCase from "./subTabs/AddNewCase";
 import Register from "./subTabs/Register";
 import Upload from "./subTabs/Upload";
 import CaseData from "./subTabs/CaseData";
 import Entry from "./entry";
+import { useWeb3 } from "../contexts/Web3Context";
 
 const courtABI = require("../abis/Court.json");
-const courtContractAddress = "0x700739A67064B3BA1Fb0e8E944aA8A9E0B848ecb"; //rinkeby
+const courtContractAddress = "0x700739A67064B3BA1Fb0e8E944aA8A9E0B848ecb"; // polygon matic testnet
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -65,18 +65,22 @@ export default function Evidence() {
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState();
 
+  const { web3 } = useWeb3();
+
   // Setup Contracts on App Load
   useEffect(() => {
     async function contractsSetup() {
       setContract(new web3.eth.Contract(courtABI, courtContractAddress));
     }
-    contractsSetup();
+    if (web3) {
+      contractsSetup();
 
-    web3.eth.getAccounts((error, accounts) => {
-      console.log(accounts);
-      setAccount(accounts[0]);
-    });
-  }, []);
+      web3.eth.getAccounts((error, accounts) => {
+        console.log(accounts);
+        setAccount(accounts[0]);
+      });
+    }
+  }, [web3]);
 
   const addCase = (
     judgeID,
@@ -227,7 +231,7 @@ export default function Evidence() {
           <Tab label="Upload Evidence" {...a11yProps(1)} />
           <Tab label="Register Lawyer/Judge" {...a11yProps(2)} />
           <Tab label="View Case Data" {...a11yProps(3)} />
-          <Tab label="Video Chat" {...a11yProps(4)} />
+          {/* <Tab label="Video Chat" {...a11yProps(4)} /> */}
         </Tabs>
       </AppBar>
       <div>
