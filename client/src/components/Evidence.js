@@ -9,7 +9,7 @@ import AddNewCase from "./subTabs/AddNewCase";
 import Register from "./subTabs/Register";
 import Upload from "./subTabs/Upload";
 import CaseData from "./subTabs/CaseData";
-import Entry from "./entry";
+// import Entry from "./entry";
 import { useWeb3 } from "../contexts/Web3Context";
 
 const courtABI = require("../abis/Court.json");
@@ -290,7 +290,7 @@ export default function Evidence() {
               position: "fixed",
             }}
           />
-          <Entry />
+          {/* <Entry /> */}
         </TabPanel>
       </div>
     </div>

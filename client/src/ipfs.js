@@ -1,4 +1,20 @@
-const IPFS = require('ipfs-api');
-const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+const ipfsClient = require("ipfs-http-client");
 
-export default ipfs;
+const auth =
+  "Basic " +
+  Buffer.from(
+    process.env.REACT_APP_INFURA_ID +
+      ":" +
+      process.env.REACT_APP_INFURA_SECRET_KEY
+  ).toString("base64");
+
+const client = ipfsClient({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+  headers: {
+    authorization: auth,
+  },
+});
+
+export default client;

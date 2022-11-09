@@ -1,20 +1,20 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ipfs from "../../ipfs";
 import { StyledDropZone } from "react-drop-zone";
 import "react-drop-zone/dist/styles.css";
 import fileReaderPullStream from "pull-file-reader";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-function Upload({tfStyle, submit, classes}) {
-  const [caseId, setCaseId] = useState()
+function Upload({ tfStyle, submit, classes }) {
+  const [caseId, setCaseId] = useState();
   const [ipfsHash, setIpfsHash] = useState("");
   const [fileName, setFileName] = useState("");
   const [fileType, setFileType] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [resText, setResText] = useState("")
+  const [resText, setResText] = useState("");
 
   const onDrop = async (file) => {
     setIsUploading(true);
@@ -23,6 +23,7 @@ function Upload({tfStyle, submit, classes}) {
 
     const stream = fileReaderPullStream(file);
     const result = await ipfs.add(stream);
+    console.log({ result });
     setIpfsHash(result[0].hash);
     setIsUploading(false);
 
@@ -31,13 +32,13 @@ function Upload({tfStyle, submit, classes}) {
 
   return (
     <>
-    <h1>Upload Evidence for Case</h1>
+      <h1>Upload Evidence for Case</h1>
       <TextField
         style={tfStyle}
         label="Enter Case ID"
         type="number"
         variant="outlined"
-        onChange={e=>setCaseId(e.target.value)}
+        onChange={(e) => setCaseId(e.target.value)}
       />
       <StyledDropZone
         onDrop={onDrop}
@@ -63,17 +64,19 @@ function Upload({tfStyle, submit, classes}) {
         variant="contained"
         color="primary"
         style={{ marginTop: "15px", minHeight: "36px" }}
-        onClick={() => submit(caseId, ipfsHash, fileType, setLoading, setResText)}
+        onClick={() =>
+          submit(caseId, ipfsHash, fileType, setLoading, setResText)
+        }
       >
-      {
-        loading ? (
+        {loading ? (
           <CircularProgress size={24} className={classes.buttonProgress} />
-        ) : "Submit"
-      }
+        ) : (
+          "Submit"
+        )}
       </Button>
-      <h2>{resText}</h2> 
+      <h2>{resText}</h2>
     </>
-  )
+  );
 }
 
-export default Upload
+export default Upload;
